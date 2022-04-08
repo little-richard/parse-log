@@ -1,3 +1,3 @@
-module parseLogPostoAki
+module parse-log
 
 go 1.18

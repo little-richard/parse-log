@@ -1,47 +1,30 @@
 package formatFields
 
 import (
+	enum "parse-log/src/model/enums"
+	label "parse-log/src/strings"
 	"strconv"
 	"strings"
 	"time"
 )
 
-type FieldType int
-
-const (
-	Url FieldType = iota
-	Ip
-	Data
-	Body
-	Tempo
-	Default
-)
-
-const (
-	LabelData  string = "HORA: "
-	LabelUrl   string = "URL: "
-	LabelIp    string = "IP: "
-	LabelBody  string = "BODY: "
-	LabelTempo string = "TEMPO: "
-)
-
-func BuildTypeLineFromString(line string) FieldType {
-	if strings.Contains(line, LabelData) {
-		return Data
-	} else if strings.Contains(line, LabelUrl) {
-		return Url
-	} else if strings.Contains(line, LabelIp) {
-		return Ip
-	} else if strings.Contains(line, LabelBody) {
-		return Body
-	} else if strings.Contains(line, LabelTempo) {
-		return Tempo
+func BuildTypeLineFromString(line string) enum.FieldType {
+	if strings.Contains(line, label.Data) {
+		return enum.Data
+	} else if strings.Contains(line, label.Url) {
+		return enum.Url
+	} else if strings.Contains(line, label.Ip) {
+		return enum.Ip
+	} else if strings.Contains(line, label.Body) {
+		return enum.Body
+	} else if strings.Contains(line, label.Tempo) {
+		return enum.Tempo
 	} else {
-		return Default
+		return enum.Default
 	}
 }
 
-func formatLineByType(line string, typeLine FieldType) string {
+func FormatLineByType(line string, typeLine enum.FieldType) string {
 
 	cutString := getCutString(typeLine)
 
@@ -58,21 +41,21 @@ func formatLineByType(line string, typeLine FieldType) string {
 	}
 }
 
-func getCutString(typeLine FieldType) string {
+func getCutString(typeLine enum.FieldType) string {
 
 	switch typeLine {
-	case Ip:
-		return LabelIp
-	case Url:
-		return LabelUrl
-	case Data:
-		return LabelData
+	case enum.Ip:
+		return label.Ip
+	case enum.Url:
+		return label.Url
+	case enum.Data:
+		return label.Data
 	default:
 		return ""
 	}
 }
 
-func getDateFromLine(line string) time.Time {
+func GetDateFromLine(line string) time.Time {
 	dataHoraSplit := strings.Split(line, " ")
 	data := dataHoraSplit[0]
 	horario := dataHoraSplit[1]
