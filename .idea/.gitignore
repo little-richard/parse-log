@@ -6,3 +6,7 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+json.log
+log.json
+vcs.xml
+parseLogPostoAki.iml
