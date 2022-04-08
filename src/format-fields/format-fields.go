@@ -1,8 +1,8 @@
 package formatFields
 
 import (
-	enum "parse-log/src/model/enums"
-	label "parse-log/src/strings"
+	enum "parse-log/model/enums"
+	label "parse-log/strings"
 	"strconv"
 	"strings"
 	"time"
@@ -55,7 +55,7 @@ func getCutString(typeLine enum.FieldType) string {
 	}
 }
 
-func GetDateFromLine(line string) time.Time {
+func GetDateFromLine(line string) (time.Time, int) {
 	dataHoraSplit := strings.Split(line, " ")
 	data := dataHoraSplit[0]
 	horario := dataHoraSplit[1]
@@ -75,5 +75,5 @@ func GetDateFromLine(line string) time.Time {
 
 	dataFim := time.Date(ano, time.Month(mes), dia, hora, minutos, segundos, 0, loc)
 
-	return dataFim
+	return dataFim, hora
 }

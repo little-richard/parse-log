@@ -2,19 +2,20 @@ package parse
 
 import (
 	"bufio"
-	"container/list"
-	"fmt"
+	"log"
 	"os"
-	formatFields "parse-log/src/format-fields"
-	"parse-log/src/model"
-	enum "parse-log/src/model/enums"
-	fileUtils "parse-log/src/utils"
+	formatFields "parse-log/format-fields"
+	"parse-log/model"
+	enum "parse-log/model/enums"
+	fileUtils "parse-log/utils"
 )
 
-func FileToArray(file *os.File, scanner *bufio.Scanner) []any {
+func FileToArray(file *os.File, scanner *bufio.Scanner) []model.Log {
+
+	log.Println("Iniciando parse do arquivo para array ")
 
 	logStruct := model.Log{}
-	lista := list.New()
+	var array []model.Log
 
 	for scanner.Scan() {
 
@@ -23,7 +24,7 @@ func FileToArray(file *os.File, scanner *bufio.Scanner) []any {
 		fieldType := formatFields.BuildTypeLineFromString(line)
 
 		if fieldType == enum.Default {
-			lista.PushBack(logStruct)
+			array = append(array, logStruct)
 			logStruct = model.Log{}
 		}
 
@@ -40,7 +41,7 @@ func FileToArray(file *os.File, scanner *bufio.Scanner) []any {
 				logStruct.Ip = lineFormat
 				break
 			case enum.Data:
-				logStruct.Data = formatFields.GetDateFromLine(lineFormat)
+				logStruct.Data, logStruct.KeyHora = formatFields.GetDateFromLine(lineFormat)
 			case enum.Default:
 				break
 
@@ -49,19 +50,11 @@ func FileToArray(file *os.File, scanner *bufio.Scanner) []any {
 
 	}
 
+	log.Println("Fechando arquivo ")
+
 	fileUtils.CloseFile(file)
 
-	fmt.Printf("QUANTIDADE: %v\n", lista.Len())
-
-	array := make([]any, lista.Len())
-
-	indice := 0
-
-	for element := lista.Front(); element != nil; element = element.Next() {
-		value := element.Value
-		array[indice] = value
-		indice++
-	}
+	log.Printf("Fim Parse arquivo para Array, a quantidade de registros é: %v\n", len(array))
 
 	return array
 }

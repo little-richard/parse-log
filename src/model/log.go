@@ -3,7 +3,8 @@ package model
 import "time"
 
 type Log struct {
-	Url  string
-	Ip   string
-	Data time.Time
+	Url     string
+	Ip      string
+	Data    time.Time
+	KeyHora int
 }
